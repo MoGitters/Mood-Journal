@@ -18,8 +18,6 @@ interface PlaylistRecommendationsProps {
 
 export default function PlaylistRecommendations({ currentMood }: PlaylistRecommendationsProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
-  const [volumeLevel, setVolumeLevel] = useState<number[]>([0, 0, 0]);
   const playlists = getPlaylistsByMood(currentMood);
 
   // If there are no playlists for this mood, don't render anything
@@ -27,35 +25,10 @@ export default function PlaylistRecommendations({ currentMood }: PlaylistRecomme
     return null;
   }
 
-  // Handle play/pause for a playlist
-  const togglePlay = (index: number) => {
-    if (playingIndex === index) {
-      // If this playlist is already playing, pause it
-      setPlayingIndex(null);
-      // Reset volume bars
-      setVolumeLevel(volumeLevel.map(() => 0));
-    } else {
-      // If a different playlist is playing, stop it and play this one
-      setPlayingIndex(index);
-      // Start animated volume bars with random heights
-      const randomVolumeLevels = [
-        Math.random() * 0.7 + 0.3,
-        Math.random() * 0.7 + 0.3,
-        Math.random() * 0.7 + 0.3
-      ];
-      setVolumeLevel(randomVolumeLevels);
-      
-      // Animate volume bars while playing
-      const volumeAnimation = setInterval(() => {
-        setVolumeLevel([
-          Math.random() * 0.7 + 0.3,
-          Math.random() * 0.7 + 0.3,
-          Math.random() * 0.7 + 0.3
-        ]);
-      }, 500);
-      
-      // Clean up interval when component unmounts or playlist changes
-      return () => clearInterval(volumeAnimation);
+  // Opens YouTube link in new tab
+  const openYouTube = (url?: string) => {
+    if (url) {
+      window.open(url, '_blank', 'noopener,noreferrer');
     }
   };
 
@@ -94,6 +67,21 @@ export default function PlaylistRecommendations({ currentMood }: PlaylistRecomme
                 <CardContent>
                   <CardDescription>{playlist.description}</CardDescription>
                 </CardContent>
+                <CardFooter>
+                  {playlist.youtubeUrl && (
+                    <Button 
+                      variant="outline" 
+                      size="sm" 
+                      className="w-full flex items-center gap-1 bg-red-50 hover:bg-red-100 text-red-600 border-red-200"
+                      onClick={() => openYouTube(playlist.youtubeUrl)}
+                    >
+                      <svg viewBox="0 0 24 24" className="h-4 w-4 mr-1" fill="currentColor">
+                        <path d="M19.615 3.184c-3.604-.246-11.631-.245-15.23 0-3.897.266-4.356 2.62-4.385 8.816.029 6.185.484 8.549 4.385 8.816 3.6.245 11.626.246 15.23 0 3.897-.266 4.356-2.62 4.385-8.816-.029-6.185-.484-8.549-4.385-8.816zm-10.615 12.816v-8l8 3.993-8 4.007z" />
+                      </svg>
+                      Listen on YouTube
+                    </Button>
+                  )}
+                </CardFooter>
               </Card>
             </motion.div>
           ))}

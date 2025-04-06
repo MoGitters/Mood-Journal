@@ -5,8 +5,9 @@ export interface PlaylistItem {
   title: string;
   description: string;
   // In a real app, this could be a link to Spotify, Apple Music, etc.
-  // For this demo, we'll just use hypothetical playlists
+  // For now, we'll use YouTube links
   imageUrl: string;
+  youtubeUrl?: string; // Make it optional since not all playlists have links yet
 }
 
 export const moodPlaylists: Record<string, PlaylistItem[]> = {
@@ -15,17 +16,20 @@ export const moodPlaylists: Record<string, PlaylistItem[]> = {
     {
       title: "Happy Hits",
       description: "Upbeat and cheerful songs to maintain your happy mood",
-      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b6.svg"
+      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b6.svg",
+      youtubeUrl: "https://www.youtube.com/watch?v=ZbZSe6N_BXs&list=PL65C92D1BFCD2A38F"
     },
     {
       title: "Good Vibes",
       description: "Feel-good tunes for a positive day",
-      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b5.svg"
+      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b5.svg",
+      youtubeUrl: "https://www.youtube.com/watch?v=09R8_2nJtjg&list=PLw-VjHDlEOgvtnnnqWlTqByAtC7tXBg6D"
     },
     {
       title: "Sunshine Pop",
       description: "Bright and sunny melodies to brighten your day",
-      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f31e.svg"
+      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f31e.svg",
+      youtubeUrl: "https://www.youtube.com/watch?v=HyHNuVaZJ-k&list=PLhd1HyMTk3f5PzRjJzmzH7kkxjfkz9rOZ"
     }
   ],
   "😍": [
@@ -102,17 +106,20 @@ export const moodPlaylists: Record<string, PlaylistItem[]> = {
     {
       title: "Melancholy Melodies",
       description: "Songs that understand your sadness",
-      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b6.svg"
+      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b6.svg",
+      youtubeUrl: "https://www.youtube.com/watch?v=60ItHLz5WEA&list=PLw-VjHDlEOgvWPpRBs9FRGgJcKpDimTqf"
     },
     {
       title: "Healing Tunes",
       description: "Music to help process your feelings",
-      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b5.svg"
+      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b5.svg",
+      youtubeUrl: "https://www.youtube.com/watch?v=6Ejga4kJUts&list=PLCVGGn6GhhDtYomlFrJ-cUxdpC5e2gNiP"
     },
     {
       title: "Rainy Day Reflections",
       description: "Contemplative songs for emotional moments",
-      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f327.svg"
+      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f327.svg",
+      youtubeUrl: "https://www.youtube.com/watch?v=M_nGCIASWHA&list=PL-xO__JU8YNTDb5x3sRsWmEuJZW9vJZ0U"
     }
   ],
   "😞": [
@@ -192,17 +199,20 @@ export const defaultPlaylists: PlaylistItem[] = [
   {
     title: "Mood Mix",
     description: "A balanced mix of songs for any mood",
-    imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b6.svg"
+    imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b6.svg",
+    youtubeUrl: "https://www.youtube.com/watch?v=kTJczUoc26U&list=PLfOG5qRn-NH5sTwG5_XQWlRKWUZnqYN6f"
   },
   {
     title: "Daily Discovery",
     description: "New music to discover regardless of your mood",
-    imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b5.svg"
+    imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b5.svg",
+    youtubeUrl: "https://www.youtube.com/watch?v=CvUK-YWYcaE&list=PLO2MyApnT0PKMeBKzPz0y43QHwSnXSvxD"
   },
   {
     title: "Timeless Classics",
     description: "Evergreen hits that work for any emotion",
-    imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b8.svg"
+    imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b8.svg",
+    youtubeUrl: "https://www.youtube.com/watch?v=C4p_Oyez1JI&list=PLf8_TFoQQLQqsOQR02EgMTJqpLqDJN9vS"
   }
 ];
 
