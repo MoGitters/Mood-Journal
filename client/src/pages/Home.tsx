@@ -11,6 +11,7 @@ import DateSelector from "@/components/DateSelector";
 import MoodSelector from "@/components/MoodSelector";
 import JournalEntry from "@/components/JournalEntry";
 import StickerPanel from "@/components/StickerPanel";
+import PlaylistRecommendations from "@/components/PlaylistRecommendations";
 import { JournalEntry as JournalEntryType, Sticker, moodEmojis } from "@shared/schema";
 
 export default function Home() {
@@ -159,14 +160,16 @@ export default function Home() {
               <ClipboardList className="h-5 w-5 text-pastel-purple" />
             </Button>
           </Link>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="p-2 bg-white bg-opacity-70 rounded-full shadow-md hover:bg-opacity-100 transition"
-            title="Settings"
-          >
-            <Settings className="h-5 w-5 text-pastel-purple" />
-          </Button>
+          <Link href="/settings">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="p-2 bg-white bg-opacity-70 rounded-full shadow-md hover:bg-opacity-100 transition"
+              title="Settings"
+            >
+              <Settings className="h-5 w-5 text-pastel-purple" />
+            </Button>
+          </Link>
         </div>
       </header>
 
@@ -206,6 +209,9 @@ export default function Home() {
               {saveMutation.isPending ? "Saving..." : "Save Entry"}
             </Button>
           </div>
+          
+          {/* Mood-based playlist recommendations */}
+          <PlaylistRecommendations currentMood={selectedMood} />
         </div>
       </main>
 

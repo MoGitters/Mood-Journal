@@ -136,4 +136,17 @@
   .reminder-upcoming {
     @apply border-l-green-500;
   }
+  
+  /* Playlist recommendations styling */
+  .playlist-card {
+    @apply transition-all duration-300;
+  }
+  
+  .playlist-card:hover {
+    @apply transform -translate-y-1 shadow-lg;
+  }
+  
+  .playlist-image {
+    @apply rounded-full p-1 bg-white/70;
+  }
 }
