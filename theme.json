@@ -1,0 +1,13 @@
+{
+  "variant": "professional",
+  "primary": "hsl(289, 73%, 76%)",
+  "appearance": "light",
+  "radius": 1,
+  "--pastel-pink": "355 100% 90%",
+  "--pastel-purple": "260 100% 86%",
+  "--pastel-blue": "200 100% 87%",
+  "--pastel-yellow": "54 100% 88%",
+  "--pastel-green": "120 100% 87%",
+  "--pastel-coral": "16 100% 88%",
+  "--pastel-beige": "60 56% 91%"
+}
