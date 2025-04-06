@@ -5,10 +5,12 @@ import {
   CardContent, 
   CardDescription, 
   CardHeader, 
-  CardTitle
+  CardTitle,
+  CardFooter
 } from "@/components/ui/card";
-import { Music } from "lucide-react";
+import { Music, Play, Pause, Volume2 } from "lucide-react";
 import { motion } from "framer-motion";
+import { Button } from "@/components/ui/button";
 
 interface PlaylistRecommendationsProps {
   currentMood: string;
@@ -16,12 +18,46 @@ interface PlaylistRecommendationsProps {
 
 export default function PlaylistRecommendations({ currentMood }: PlaylistRecommendationsProps) {
   const [isExpanded, setIsExpanded] = useState(false);
+  const [playingIndex, setPlayingIndex] = useState<number | null>(null);
+  const [volumeLevel, setVolumeLevel] = useState<number[]>([0, 0, 0]);
   const playlists = getPlaylistsByMood(currentMood);
 
   // If there are no playlists for this mood, don't render anything
   if (!playlists || playlists.length === 0) {
     return null;
   }
+
+  // Handle play/pause for a playlist
+  const togglePlay = (index: number) => {
+    if (playingIndex === index) {
+      // If this playlist is already playing, pause it
+      setPlayingIndex(null);
+      // Reset volume bars
+      setVolumeLevel(volumeLevel.map(() => 0));
+    } else {
+      // If a different playlist is playing, stop it and play this one
+      setPlayingIndex(index);
+      // Start animated volume bars with random heights
+      const randomVolumeLevels = [
+        Math.random() * 0.7 + 0.3,
+        Math.random() * 0.7 + 0.3,
+        Math.random() * 0.7 + 0.3
+      ];
+      setVolumeLevel(randomVolumeLevels);
+      
+      // Animate volume bars while playing
+      const volumeAnimation = setInterval(() => {
+        setVolumeLevel([
+          Math.random() * 0.7 + 0.3,
+          Math.random() * 0.7 + 0.3,
+          Math.random() * 0.7 + 0.3
+        ]);
+      }, 500);
+      
+      // Clean up interval when component unmounts or playlist changes
+      return () => clearInterval(volumeAnimation);
+    }
+  };
 
   return (
     <div className="mt-6">
