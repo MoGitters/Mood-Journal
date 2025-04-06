@@ -301,7 +301,7 @@ export default function Reminders() {
             <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
               <DialogTrigger asChild>
                 <Button 
-                  className="px-6 py-2 bg-pastel-purple text-white rounded-full shadow-md hover:shadow-lg transition font-medium flex items-center gap-2"
+                  className="px-6 py-2 bg-[#4A8EC9] text-white rounded-full shadow-md hover:shadow-lg transition font-medium flex items-center gap-2"
                 >
                   <Plus className="h-4 w-4" />
                   <span>Add New Reminder</span>
@@ -418,7 +418,7 @@ export default function Reminders() {
                     />
                     
                     <DialogFooter>
-                      <Button type="submit">
+                      <Button type="submit" className="bg-[#4A8EC9] text-white">
                         {editingReminder ? "Update Reminder" : "Create Reminder"}
                       </Button>
                     </DialogFooter>
@@ -530,7 +530,7 @@ export default function Reminders() {
                   </p>
                 )}
                 <Button
-                  className="bg-pastel-purple text-white"
+                  className="bg-[#4A8EC9] text-white"
                   onClick={() => setIsDialogOpen(true)}
                 >
                   Add New Reminder

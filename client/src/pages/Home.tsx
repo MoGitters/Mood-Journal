@@ -193,14 +193,14 @@ export default function Home() {
           <div className="flex justify-between">
             <Button 
               onClick={handleClearEntry}
-              className="px-6 py-2 bg-pastel-pink rounded-full shadow-md hover:shadow-lg transition font-medium flex items-center gap-2"
+              className="px-6 py-2 bg-[#6D9BC3] text-white rounded-full shadow-md hover:shadow-lg transition font-medium flex items-center gap-2"
             >
               <span>Clear</span>
             </Button>
             
             <Button 
               onClick={handleSaveEntry}
-              className="px-6 py-2 bg-pastel-purple text-white rounded-full shadow-md hover:shadow-lg transition font-medium flex items-center gap-2"
+              className="px-6 py-2 bg-[#4A8EC9] text-white rounded-full shadow-md hover:shadow-lg transition font-medium flex items-center gap-2"
               disabled={saveMutation.isPending}
             >
               {saveMutation.isPending ? "Saving..." : "Save Entry"}
