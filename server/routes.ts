@@ -1,7 +1,7 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertJournalEntrySchema, insertReminderSchema } from "@shared/schema";
+import { insertJournalEntrySchema, insertReminderSchema, insertUserSettingsSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 
 export async function registerRoutes(app: Express): Promise<Server> {
@@ -220,6 +220,59 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting reminder:", error);
       res.status(500).json({ message: "Failed to delete reminder" });
+    }
+  });
+
+  // === Settings Routes ===
+  
+  // Get settings
+  app.get("/api/settings", async (req, res) => {
+    try {
+      const settings = await storage.getSettings();
+      res.json(settings);
+    } catch (error) {
+      console.error("Error fetching settings:", error);
+      res.status(500).json({ message: "Failed to fetch settings" });
+    }
+  });
+
+  // Update settings
+  app.put("/api/settings", async (req, res) => {
+    try {
+      const result = insertUserSettingsSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          message: "Invalid settings data", 
+          errors: validationError.details 
+        });
+      }
+      
+      const settings = result.data;
+      const updatedSettings = await storage.updateSettings(settings);
+      
+      res.json(updatedSettings);
+    } catch (error) {
+      console.error("Error updating settings:", error);
+      res.status(500).json({ message: "Failed to update settings" });
+    }
+  });
+
+  // Export journal entries as PDF
+  app.get("/api/export/journal", async (req, res) => {
+    try {
+      const entries = await storage.getAllJournalEntries();
+      
+      // In a real implementation, we would generate a PDF here
+      // For now, we'll just return the entries as JSON with a note
+      res.json({
+        message: "PDF generation would happen here in a production environment",
+        entries
+      });
+    } catch (error) {
+      console.error("Error exporting journal entries:", error);
+      res.status(500).json({ message: "Failed to export journal entries" });
     }
   });
 

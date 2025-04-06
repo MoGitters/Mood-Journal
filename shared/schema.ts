@@ -109,3 +109,43 @@ export const stickers = {
     { id: "balloon", type: "objects", imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f388.svg" }
   ]
 };
+
+// Define settings schema types
+export const themeColors = ["default", "lavender", "mint", "peach", "sky"] as const;
+export type ThemeColor = typeof themeColors[number];
+
+export const fontSizes = ["small", "medium", "large"] as const;
+export type FontSize = typeof fontSizes[number];
+
+export const colorModes = ["light", "dark", "system"] as const;
+export type ColorMode = typeof colorModes[number];
+
+export const backgroundGradients = [
+  "orange-blue", // Default: Light orange to sky blue
+  "purple-pink",
+  "green-blue",
+  "blue-purple",
+  "pink-orange"
+] as const;
+export type BackgroundGradient = typeof backgroundGradients[number];
+
+// User settings schema
+export const userSettings = pgTable("user_settings", {
+  id: serial("id").primaryKey(),
+  colorMode: text("color_mode", { enum: colorModes }).default("light").notNull(),
+  themeColor: text("theme_color", { enum: themeColors }).default("default").notNull(),
+  fontSize: text("font_size", { enum: fontSizes }).default("medium").notNull(),
+  zoomLevel: integer("zoom_level").default(100).notNull(),
+  backgroundGradient: text("background_gradient", { enum: backgroundGradients }).default("orange-blue").notNull(),
+});
+
+export const insertUserSettingsSchema = createInsertSchema(userSettings).pick({
+  colorMode: true,
+  themeColor: true,
+  fontSize: true,
+  zoomLevel: true,
+  backgroundGradient: true,
+});
+
+export type InsertUserSettings = z.infer<typeof insertUserSettingsSchema>;
+export type UserSettings = typeof userSettings.$inferSelect;

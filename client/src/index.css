@@ -7,12 +7,42 @@
     @apply border-border;
   }
 
+  :root {
+    --base-font-size: 16px;
+  }
+
+  html {
+    font-size: var(--base-font-size);
+  }
+
+  /* Default gradient if attribute is not set */
   body {
     @apply font-sans antialiased bg-background text-foreground;
     background: linear-gradient(to bottom, #FFD8B1, #a6d5fa);
     background-attachment: fixed;
     min-height: 100vh;
     overflow-x: hidden;
+  }
+
+  /* Background gradients */
+  html[data-gradient="orange-blue"] body {
+    background: linear-gradient(to bottom, #FFD8B1, #a6d5fa);
+  }
+
+  html[data-gradient="purple-pink"] body {
+    background: linear-gradient(to bottom, #C8A2C8, #FFB6C1);
+  }
+
+  html[data-gradient="green-blue"] body {
+    background: linear-gradient(to bottom, #90EE90, #87CEEB);
+  }
+
+  html[data-gradient="blue-purple"] body {
+    background: linear-gradient(to bottom, #87CEEB, #C8A2C8);
+  }
+
+  html[data-gradient="pink-orange"] body {
+    background: linear-gradient(to bottom, #FFB6C1, #FFBC80);
   }
 }
 
@@ -28,6 +58,27 @@
   .journal-bg {
     background-color: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(4px);
+  }
+  
+  /* For gradient swatches in settings */
+  .bg-gradient-orange-blue {
+    background: linear-gradient(to right, #FFD8B1, #a6d5fa);
+  }
+
+  .bg-gradient-purple-pink {
+    background: linear-gradient(to right, #C8A2C8, #FFB6C1);
+  }
+
+  .bg-gradient-green-blue {
+    background: linear-gradient(to right, #90EE90, #87CEEB);
+  }
+
+  .bg-gradient-blue-purple {
+    background: linear-gradient(to right, #87CEEB, #C8A2C8);
+  }
+
+  .bg-gradient-pink-orange {
+    background: linear-gradient(to right, #FFB6C1, #FFBC80);
   }
 
   .sticker-item {

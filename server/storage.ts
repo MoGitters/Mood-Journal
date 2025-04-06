@@ -4,7 +4,10 @@ import {
   type InsertJournalEntry,
   reminders,
   type Reminder,
-  type InsertReminder 
+  type InsertReminder,
+  userSettings,
+  type UserSettings,
+  type InsertUserSettings
 } from "@shared/schema";
 
 // Define the storage interface
@@ -24,12 +27,17 @@ export interface IStorage {
   updateReminder(id: number, reminder: InsertReminder): Promise<Reminder>;
   toggleReminderComplete(id: number): Promise<Reminder>;
   deleteReminder(id: number): Promise<boolean>;
+  
+  // Settings
+  getSettings(): Promise<UserSettings>;
+  updateSettings(settings: InsertUserSettings): Promise<UserSettings>;
 }
 
 // Memory storage implementation
 export class MemStorage implements IStorage {
   private entries: Map<number, JournalEntry>;
   private reminderItems: Map<number, Reminder>;
+  private userSettings: UserSettings;
   private currentId: number;
   private currentReminderId: number;
 
@@ -38,6 +46,16 @@ export class MemStorage implements IStorage {
     this.reminderItems = new Map();
     this.currentId = 1;
     this.currentReminderId = 1;
+    
+    // Initialize with default settings
+    this.userSettings = {
+      id: 1,
+      colorMode: "light",
+      themeColor: "default",
+      fontSize: "medium",
+      zoomLevel: 100,
+      backgroundGradient: "orange-blue"
+    };
   }
 
   // Journal Entry Methods
@@ -188,6 +206,25 @@ export class MemStorage implements IStorage {
     }
     
     return this.reminderItems.delete(id);
+  }
+
+  // Settings Methods
+  async getSettings(): Promise<UserSettings> {
+    return this.userSettings;
+  }
+
+  async updateSettings(settings: InsertUserSettings): Promise<UserSettings> {
+    // Update only the provided settings, keep the rest as they are
+    this.userSettings = {
+      ...this.userSettings,
+      colorMode: settings.colorMode ?? this.userSettings.colorMode,
+      themeColor: settings.themeColor ?? this.userSettings.themeColor,
+      fontSize: settings.fontSize ?? this.userSettings.fontSize,
+      zoomLevel: settings.zoomLevel ?? this.userSettings.zoomLevel,
+      backgroundGradient: settings.backgroundGradient ?? this.userSettings.backgroundGradient
+    };
+    
+    return this.userSettings;
   }
 }
 
