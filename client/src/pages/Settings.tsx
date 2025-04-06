@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { useLocation } from "wouter";
 import { z } from "zod";
 import { Settings as SettingsIcon, Download, Upload, Sun, Moon, Laptop } from "lucide-react";
 import { toast } from "@/hooks/use-toast";
@@ -60,6 +61,9 @@ export default function Settings() {
     }
   }, [settings, form]);
   
+  // Set up navigation
+  const [, navigate] = useLocation();
+
   // Settings update mutation
   const updateMutation = useMutation({
     mutationFn: async (values: SettingsFormValues) => {
@@ -71,6 +75,12 @@ export default function Settings() {
         description: "Your settings have been saved successfully.",
       });
       queryClient.invalidateQueries({ queryKey: ['/api/settings'] });
+      
+      // Redirect to the main journal page after a brief delay
+      // to allow the toast to be visible
+      setTimeout(() => {
+        navigate("/");
+      }, 1000);
     },
     onError: (error) => {
       console.error("Error updating settings:", error);
