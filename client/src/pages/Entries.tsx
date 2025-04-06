@@ -51,7 +51,7 @@ export default function Entries() {
               variant="ghost"
               size="icon"
               className="p-2 bg-white bg-opacity-70 rounded-full shadow-md hover:bg-opacity-100 transition"
-              title="Notes & Reminders"
+              title="Reminders"
             >
               <ClipboardList className="h-5 w-5 text-pastel-purple" />
             </Button>

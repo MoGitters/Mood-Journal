@@ -262,7 +262,7 @@ export default function Reminders() {
               <ArrowLeft className="h-5 w-5 text-pastel-purple" />
             </Button>
           </Link>
-          <h1 className="text-2xl font-bold text-white drop-shadow-md">Notes & Reminders</h1>
+          <h1 className="text-2xl font-bold text-white drop-shadow-md">Reminders</h1>
         </div>
         
         <div className="flex space-x-2">
@@ -313,7 +313,7 @@ export default function Reminders() {
                   <DialogDescription>
                     {editingReminder 
                       ? "Update your reminder details below." 
-                      : "Add a new reminder to help you keep track of your tasks."}
+                      : "Add a new reminder to help you keep track of important tasks."}
                   </DialogDescription>
                 </DialogHeader>
                 
