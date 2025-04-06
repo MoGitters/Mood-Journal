@@ -17,7 +17,7 @@ export const moodPlaylists: Record<string, PlaylistItem[]> = {
       title: "Happy Hits",
       description: "Upbeat and cheerful songs to maintain your happy mood",
       imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b6.svg",
-      youtubeUrl: "https://www.youtube.com/watch?v=ZbZSe6N_BXs&list=PL65C92D1BFCD2A38F"
+      youtubeUrl: "https://www.youtube.com/watch?v=I140iNpx1xM"
     },
     {
       title: "Good Vibes",
