@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { Link } from "wouter";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, ClipboardList } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -37,11 +37,25 @@ export default function Entries() {
               variant="ghost"
               size="icon"
               className="mr-2 p-2 bg-white bg-opacity-70 rounded-full shadow-md hover:bg-opacity-100 transition"
+              title="Back to Journal"
             >
               <ArrowLeft className="h-5 w-5 text-pastel-purple" />
             </Button>
           </Link>
           <h1 className="text-2xl font-bold text-white drop-shadow-md">Journal Entries</h1>
+        </div>
+        
+        <div className="flex gap-2">
+          <Link href="/reminders">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="p-2 bg-white bg-opacity-70 rounded-full shadow-md hover:bg-opacity-100 transition"
+              title="Notes & Reminders"
+            >
+              <ClipboardList className="h-5 w-5 text-pastel-purple" />
+            </Button>
+          </Link>
         </div>
       </header>
 

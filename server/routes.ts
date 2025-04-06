@@ -1,10 +1,12 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertJournalEntrySchema } from "@shared/schema";
+import { insertJournalEntrySchema, insertReminderSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // === Journal Entry Routes ===
+  
   // Get all journal entries
   app.get("/api/journal", async (req, res) => {
     try {
@@ -82,6 +84,142 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting journal entry:", error);
       res.status(500).json({ message: "Failed to delete journal entry" });
+    }
+  });
+
+  // === Reminder Routes ===
+
+  // Get all reminders
+  app.get("/api/reminders", async (req, res) => {
+    try {
+      const reminders = await storage.getAllReminders();
+      res.json(reminders);
+    } catch (error) {
+      console.error("Error fetching reminders:", error);
+      res.status(500).json({ message: "Failed to fetch reminders" });
+    }
+  });
+
+  // Get reminder by ID
+  app.get("/api/reminders/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
+      }
+      
+      const reminder = await storage.getReminder(id);
+      if (reminder) {
+        res.json(reminder);
+      } else {
+        res.status(404).json({ message: "Reminder not found" });
+      }
+    } catch (error) {
+      console.error("Error fetching reminder:", error);
+      res.status(500).json({ message: "Failed to fetch reminder" });
+    }
+  });
+
+  // Create reminder
+  app.post("/api/reminders", async (req, res) => {
+    try {
+      const result = insertReminderSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          message: "Invalid reminder data", 
+          errors: validationError.details 
+        });
+      }
+      
+      const reminder = result.data;
+      const newReminder = await storage.createReminder(reminder);
+      
+      res.status(201).json(newReminder);
+    } catch (error) {
+      console.error("Error creating reminder:", error);
+      res.status(500).json({ message: "Failed to create reminder" });
+    }
+  });
+
+  // Update reminder
+  app.put("/api/reminders/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
+      }
+      
+      const result = insertReminderSchema.safeParse(req.body);
+      
+      if (!result.success) {
+        const validationError = fromZodError(result.error);
+        return res.status(400).json({ 
+          message: "Invalid reminder data", 
+          errors: validationError.details 
+        });
+      }
+      
+      const reminder = result.data;
+      
+      try {
+        const updatedReminder = await storage.updateReminder(id, reminder);
+        res.json(updatedReminder);
+      } catch (error: any) {
+        if (error.message.includes("not found")) {
+          res.status(404).json({ message: "Reminder not found" });
+        } else {
+          throw error;
+        }
+      }
+    } catch (error) {
+      console.error("Error updating reminder:", error);
+      res.status(500).json({ message: "Failed to update reminder" });
+    }
+  });
+
+  // Toggle reminder completion status
+  app.patch("/api/reminders/:id/toggle", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
+      }
+      
+      try {
+        const updatedReminder = await storage.toggleReminderComplete(id);
+        res.json(updatedReminder);
+      } catch (error: any) {
+        if (error.message.includes("not found")) {
+          res.status(404).json({ message: "Reminder not found" });
+        } else {
+          throw error;
+        }
+      }
+    } catch (error) {
+      console.error("Error toggling reminder status:", error);
+      res.status(500).json({ message: "Failed to toggle reminder status" });
+    }
+  });
+
+  // Delete reminder
+  app.delete("/api/reminders/:id", async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      if (isNaN(id)) {
+        return res.status(400).json({ message: "Invalid ID format" });
+      }
+      
+      const success = await storage.deleteReminder(id);
+      if (success) {
+        res.status(204).send();
+      } else {
+        res.status(404).json({ message: "Reminder not found" });
+      }
+    } catch (error) {
+      console.error("Error deleting reminder:", error);
+      res.status(500).json({ message: "Failed to delete reminder" });
     }
   });
 

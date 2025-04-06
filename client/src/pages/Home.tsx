@@ -5,7 +5,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { BookOpen, Settings } from "lucide-react";
+import { BookOpen, Settings, ClipboardList } from "lucide-react";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import DateSelector from "@/components/DateSelector";
 import MoodSelector from "@/components/MoodSelector";
@@ -144,14 +144,26 @@ export default function Home() {
               variant="ghost"
               size="icon"
               className="p-2 bg-white bg-opacity-70 rounded-full shadow-md hover:bg-opacity-100 transition"
+              title="Journal Entries"
             >
               <BookOpen className="h-5 w-5 text-pastel-purple" />
+            </Button>
+          </Link>
+          <Link href="/reminders">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="p-2 bg-white bg-opacity-70 rounded-full shadow-md hover:bg-opacity-100 transition"
+              title="Notes & Reminders"
+            >
+              <ClipboardList className="h-5 w-5 text-pastel-purple" />
             </Button>
           </Link>
           <Button
             variant="ghost"
             size="icon"
             className="p-2 bg-white bg-opacity-70 rounded-full shadow-md hover:bg-opacity-100 transition"
+            title="Settings"
           >
             <Settings className="h-5 w-5 text-pastel-purple" />
           </Button>

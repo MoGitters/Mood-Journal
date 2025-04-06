@@ -1,25 +1,46 @@
-import { journalEntries, type JournalEntry, type InsertJournalEntry } from "@shared/schema";
+import { 
+  journalEntries, 
+  type JournalEntry, 
+  type InsertJournalEntry,
+  reminders,
+  type Reminder,
+  type InsertReminder 
+} from "@shared/schema";
 
 // Define the storage interface
 export interface IStorage {
+  // Journal entries
   getAllJournalEntries(): Promise<JournalEntry[]>;
   getJournalEntry(id: number): Promise<JournalEntry | undefined>;
   getJournalEntryByDate(date: string): Promise<JournalEntry | undefined>;
   createJournalEntry(entry: InsertJournalEntry): Promise<JournalEntry>;
   updateJournalEntry(id: number, entry: InsertJournalEntry): Promise<JournalEntry>;
   deleteJournalEntry(id: number): Promise<boolean>;
+  
+  // Reminders
+  getAllReminders(): Promise<Reminder[]>;
+  getReminder(id: number): Promise<Reminder | undefined>;
+  createReminder(reminder: InsertReminder): Promise<Reminder>;
+  updateReminder(id: number, reminder: InsertReminder): Promise<Reminder>;
+  toggleReminderComplete(id: number): Promise<Reminder>;
+  deleteReminder(id: number): Promise<boolean>;
 }
 
 // Memory storage implementation
 export class MemStorage implements IStorage {
   private entries: Map<number, JournalEntry>;
+  private reminderItems: Map<number, Reminder>;
   private currentId: number;
+  private currentReminderId: number;
 
   constructor() {
     this.entries = new Map();
+    this.reminderItems = new Map();
     this.currentId = 1;
+    this.currentReminderId = 1;
   }
 
+  // Journal Entry Methods
   async getAllJournalEntries(): Promise<JournalEntry[]> {
     return Array.from(this.entries.values()).sort((a, b) => {
       const dateA = new Date(a.date).getTime();
@@ -43,7 +64,14 @@ export class MemStorage implements IStorage {
 
   async createJournalEntry(entry: InsertJournalEntry): Promise<JournalEntry> {
     const id = this.currentId++;
-    const newEntry: JournalEntry = { ...entry, id };
+    // Ensure proper type conversion for the JournalEntry
+    const newEntry: JournalEntry = { 
+      id,
+      date: entry.date,
+      mood: entry.mood,
+      content: entry.content,
+      stickers: Array.isArray(entry.stickers) ? [...entry.stickers] : null
+    };
     this.entries.set(id, newEntry);
     return newEntry;
   }
@@ -55,7 +83,14 @@ export class MemStorage implements IStorage {
       throw new Error(`Journal entry with id ${id} not found`);
     }
     
-    const updatedEntry: JournalEntry = { ...entry, id };
+    // Ensure proper type conversion for the JournalEntry
+    const updatedEntry: JournalEntry = { 
+      id,
+      date: entry.date,
+      mood: entry.mood,
+      content: entry.content,
+      stickers: Array.isArray(entry.stickers) ? [...entry.stickers] : null
+    };
     this.entries.set(id, updatedEntry);
     return updatedEntry;
   }
@@ -66,6 +101,93 @@ export class MemStorage implements IStorage {
     }
     
     return this.entries.delete(id);
+  }
+
+  // Reminder Methods
+  async getAllReminders(): Promise<Reminder[]> {
+    return Array.from(this.reminderItems.values()).sort((a, b) => {
+      // Sort by due date (ascending) and then by priority (high first)
+      const dateA = new Date(a.dueDate).getTime();
+      const dateB = new Date(b.dueDate).getTime();
+      
+      if (dateA === dateB) {
+        // When dates are equal, sort by priority (high > medium > low)
+        const priorityOrder = { high: 0, medium: 1, low: 2 };
+        return priorityOrder[a.priority as keyof typeof priorityOrder] - 
+               priorityOrder[b.priority as keyof typeof priorityOrder];
+      }
+      
+      return dateA - dateB;
+    });
+  }
+
+  async getReminder(id: number): Promise<Reminder | undefined> {
+    return this.reminderItems.get(id);
+  }
+
+  async createReminder(reminder: InsertReminder): Promise<Reminder> {
+    const id = this.currentReminderId++;
+    const now = new Date();
+    
+    // Ensure proper type conversion for Reminder
+    const newReminder: Reminder = { 
+      id,
+      title: reminder.title,
+      note: reminder.note,
+      dueDate: reminder.dueDate,
+      completed: reminder.completed ?? false,
+      priority: reminder.priority ?? "medium",
+      createdAt: now
+    };
+    
+    this.reminderItems.set(id, newReminder);
+    return newReminder;
+  }
+
+  async updateReminder(id: number, reminder: InsertReminder): Promise<Reminder> {
+    const existingReminder = this.reminderItems.get(id);
+    
+    if (!existingReminder) {
+      throw new Error(`Reminder with id ${id} not found`);
+    }
+    
+    // Ensure proper type conversion for Reminder
+    const updatedReminder: Reminder = { 
+      id,
+      title: reminder.title,
+      note: reminder.note,
+      dueDate: reminder.dueDate,
+      completed: reminder.completed ?? existingReminder.completed,
+      priority: reminder.priority ?? existingReminder.priority,
+      createdAt: existingReminder.createdAt 
+    };
+    
+    this.reminderItems.set(id, updatedReminder);
+    return updatedReminder;
+  }
+
+  async toggleReminderComplete(id: number): Promise<Reminder> {
+    const reminder = this.reminderItems.get(id);
+    
+    if (!reminder) {
+      throw new Error(`Reminder with id ${id} not found`);
+    }
+    
+    const updatedReminder: Reminder = { 
+      ...reminder, 
+      completed: !reminder.completed 
+    };
+    
+    this.reminderItems.set(id, updatedReminder);
+    return updatedReminder;
+  }
+
+  async deleteReminder(id: number): Promise<boolean> {
+    if (!this.reminderItems.has(id)) {
+      return false;
+    }
+    
+    return this.reminderItems.delete(id);
   }
 }
 

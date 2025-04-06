@@ -43,4 +43,46 @@
     transform: scale(1.2);
     cursor: pointer;
   }
+  
+  /* Reminders page styling */
+  .reminder-card {
+    transition: all 0.2s ease;
+  }
+
+  .reminder-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .reminder-priority-high {
+    @apply bg-red-100 text-red-800 border-red-300;
+  }
+
+  .reminder-priority-medium {
+    @apply bg-orange-100 text-orange-800 border-orange-300;
+  }
+
+  .reminder-priority-low {
+    @apply bg-green-100 text-green-800 border-green-300;
+  }
+
+  .reminder-completed {
+    @apply opacity-70;
+  }
+
+  .reminder-completed .reminder-title {
+    @apply line-through text-gray-500;
+  }
+
+  .reminder-overdue {
+    @apply border-l-red-500;
+  }
+
+  .reminder-today {
+    @apply border-l-orange-500;
+  }
+
+  .reminder-upcoming {
+    @apply border-l-green-500;
+  }
 }

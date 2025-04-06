@@ -1,4 +1,4 @@
-import { pgTable, text, serial, integer, date, jsonb } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, integer, date, jsonb, boolean, timestamp } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -34,6 +34,33 @@ export const insertJournalEntrySchema = createInsertSchema(journalEntries).pick(
 
 export type InsertJournalEntry = z.infer<typeof insertJournalEntrySchema>;
 export type JournalEntry = typeof journalEntries.$inferSelect;
+
+// Define the reminders table
+export const reminders = pgTable("reminders", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  note: text("note").notNull(),
+  dueDate: date("due_date").notNull(),
+  completed: boolean("completed").default(false).notNull(),
+  priority: text("priority").default("medium").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+// Create the insert schema for reminders
+export const insertReminderSchema = createInsertSchema(reminders).pick({
+  title: true,
+  note: true,
+  dueDate: true,
+  priority: true,
+  completed: true,
+});
+
+export type InsertReminder = z.infer<typeof insertReminderSchema>;
+export type Reminder = typeof reminders.$inferSelect;
+
+// Define priority types
+export const reminderPriorities = ["low", "medium", "high"] as const;
+export type ReminderPriority = typeof reminderPriorities[number];
 
 // Define the available mood emojis
 export const moodEmojis = [
