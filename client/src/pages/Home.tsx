@@ -5,7 +5,7 @@ import { apiRequest, queryClient } from "@/lib/queryClient";
 import { useToast } from "@/hooks/use-toast";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import { BookOpen, Settings, ClipboardList } from "lucide-react";
+import { BookOpen, Settings, ClipboardList, BarChart2 } from "lucide-react";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import DateSelector from "@/components/DateSelector";
 import MoodSelector from "@/components/MoodSelector";
@@ -158,6 +158,16 @@ export default function Home() {
               title="Reminders"
             >
               <ClipboardList className="h-5 w-5 text-pastel-purple" />
+            </Button>
+          </Link>
+          <Link href="/analytics">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="p-2 bg-white bg-opacity-70 rounded-full shadow-md hover:bg-opacity-100 transition"
+              title="Mood Analytics"
+            >
+              <BarChart2 className="h-5 w-5 text-pastel-purple" />
             </Button>
           </Link>
           <Link href="/settings">

@@ -8,6 +8,7 @@ import Home from "@/pages/Home";
 import Entries from "@/pages/Entries";
 import Reminders from "@/pages/Reminders";
 import Settings from "@/pages/Settings";
+import Analytics from "@/pages/Analytics";
 import { toast } from "@/hooks/use-toast";
 import { type UserSettings } from "@shared/schema";
 
@@ -18,6 +19,7 @@ function Router() {
       <Route path="/entries" component={Entries} />
       <Route path="/reminders" component={Reminders} />
       <Route path="/settings" component={Settings} />
+      <Route path="/analytics" component={Analytics} />
       <Route component={NotFound} />
     </Switch>
   );
