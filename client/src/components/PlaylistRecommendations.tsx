@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { getPlaylistsByMood, PlaylistItem } from "@/lib/moodPlaylists";
+import { PlaylistItem } from "@/lib/moodPlaylists";
 import { 
   Card, 
   CardContent, 
@@ -8,7 +8,7 @@ import {
   CardTitle,
   CardFooter
 } from "@/components/ui/card";
-import { Music, Play, Pause, Volume2 } from "lucide-react";
+import { Music } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
@@ -18,12 +18,28 @@ interface PlaylistRecommendationsProps {
 
 export default function PlaylistRecommendations({ currentMood }: PlaylistRecommendationsProps) {
   const [isExpanded, setIsExpanded] = useState(false);
-  const playlists = getPlaylistsByMood(currentMood);
-
-  // If there are no playlists for this mood, don't render anything
-  if (!playlists || playlists.length === 0) {
-    return null;
-  }
+  
+  // Fixed playlists with the specific titles and links as requested
+  const fixedPlaylists: PlaylistItem[] = [
+    {
+      title: "Happy Vibes",
+      description: "Upbeat and cheerful songs to maintain your happy mood",
+      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b6.svg",
+      youtubeUrl: "https://www.youtube.com/watch?v=I140iNpx1xM"
+    },
+    {
+      title: "Coffee Vibes",
+      description: "Feel-good tunes for a positive day",
+      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b5.svg",
+      youtubeUrl: "https://www.youtube.com/watch?v=Ln4KSN0rchI&t=6s"
+    },
+    {
+      title: "Chill Vibes",
+      description: "Bright and sunny melodies to brighten your day",
+      imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f31e.svg",
+      youtubeUrl: "https://www.youtube.com/watch?v=DEWzT1geuPU"
+    }
+  ];
 
   // Opens YouTube link in new tab
   const openYouTube = (url?: string) => {
@@ -46,7 +62,7 @@ export default function PlaylistRecommendations({ currentMood }: PlaylistRecomme
 
       {isExpanded && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {playlists.map((playlist, index) => (
+          {fixedPlaylists.map((playlist, index) => (
             <motion.div
               key={playlist.title}
               initial={{ opacity: 0, y: 20 }}
