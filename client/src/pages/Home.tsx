@@ -14,6 +14,13 @@ import StickerPanel from "@/components/StickerPanel";
 import PlaylistRecommendations from "@/components/PlaylistRecommendations";
 import { JournalEntry as JournalEntryType, Sticker, moodEmojis } from "@shared/schema";
 
+// Extend the Window interface for our debounced save
+declare global {
+  interface Window {
+    stickerSaveTimeout?: ReturnType<typeof setTimeout>;
+  }
+}
+
 export default function Home() {
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -103,20 +110,46 @@ export default function Home() {
   // Add sticker to journal
   const handleAddSticker = (sticker: Omit<Sticker, "posX" | "posY" | "width" | "height">) => {
     const canvasElement = document.getElementById("sticker-canvas");
-    if (!canvasElement) return;
+    const textareaElement = document.getElementById("journal-entry");
+    if (!canvasElement || !textareaElement) return;
     
     const canvasRect = canvasElement.getBoundingClientRect();
+    const textLen = journalText.length;
     
-    // Create new sticker with random position
+    // Calculate a position that's more likely to be near the end of the text
+    // This gives the impression that stickers are added after the text
+    let posX, posY;
+    
+    // If there's substantial text, position near the bottom
+    if (textLen > 20) {
+      // Position in the bottom half of the canvas
+      posX = Math.random() * (canvasRect.width - 50);
+      posY = (canvasRect.height / 2) + (Math.random() * (canvasRect.height / 2) - 50);
+    } else {
+      // With little or no text, position in the center area
+      posX = (canvasRect.width / 2) - 25 + (Math.random() * 50);
+      posY = (canvasRect.height / 2) - 25 + (Math.random() * 50);
+    }
+    
+    // Ensure we stay within bounds
+    posX = Math.max(0, Math.min(posX, canvasRect.width - 50));
+    posY = Math.max(0, Math.min(posY, canvasRect.height - 50));
+    
+    // Create new sticker with calculated position
     const newSticker: Sticker = {
       ...sticker,
-      posX: Math.random() * (canvasRect.width - 60),
-      posY: Math.random() * (canvasRect.height - 60),
-      width: 40,
-      height: 40
+      posX,
+      posY,
+      width: 50,  // Slightly larger stickers
+      height: 50
     };
     
     setAppliedStickers([...appliedStickers, newSticker]);
+    
+    // Save the journal automatically when adding a sticker to ensure persistence
+    setTimeout(() => {
+      saveMutation.mutate();
+    }, 500);
   };
 
   // Update sticker position
@@ -124,6 +157,15 @@ export default function Home() {
     setAppliedStickers(appliedStickers.map(sticker => 
       sticker.id === id ? { ...sticker, posX, posY } : sticker
     ));
+    
+    // Use a debounced save to avoid too many API calls
+    if (window.stickerSaveTimeout) {
+      clearTimeout(window.stickerSaveTimeout);
+    }
+    
+    window.stickerSaveTimeout = setTimeout(() => {
+      saveMutation.mutate();
+    }, 800); // Save 800ms after the last position update
   };
 
   return (
