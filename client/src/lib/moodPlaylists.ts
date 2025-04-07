@@ -14,22 +14,22 @@ export const moodPlaylists: Record<string, PlaylistItem[]> = {
   // Happy/Positive moods
   "😊": [
     {
-      title: "Happy Hits",
+      title: "Happy Vibes",
       description: "Upbeat and cheerful songs to maintain your happy mood",
       imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b6.svg",
       youtubeUrl: "https://www.youtube.com/watch?v=I140iNpx1xM"
     },
     {
-      title: "Good Vibes",
+      title: "Coffee Vibes",
       description: "Feel-good tunes for a positive day",
       imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f3b5.svg",
-      youtubeUrl: "https://www.youtube.com/watch?v=Ln4KSN0rchI"
+      youtubeUrl: "https://www.youtube.com/watch?v=Ln4KSN0rchI&t=6s"
     },
     {
-      title: "Sunshine Pop",
+      title: "Chill Vibes",
       description: "Bright and sunny melodies to brighten your day",
       imageUrl: "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/svg/1f31e.svg",
-      youtubeUrl: "https://www.youtube.com/watch?v=HyHNuVaZJ-k&list=PLhd1HyMTk3f5PzRjJzmzH7kkxjfkz9rOZ"
+      youtubeUrl: "https://www.youtube.com/watch?v=DEWzT1geuPU"
     }
   ],
   "😍": [
