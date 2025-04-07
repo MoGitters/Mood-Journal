@@ -110,37 +110,20 @@ export default function Home() {
   // Add sticker to journal
   const handleAddSticker = (sticker: Omit<Sticker, "posX" | "posY" | "width" | "height">) => {
     const canvasElement = document.getElementById("sticker-canvas");
-    const textareaElement = document.getElementById("journal-entry");
-    if (!canvasElement || !textareaElement) return;
+    if (!canvasElement) return;
     
     const canvasRect = canvasElement.getBoundingClientRect();
-    const textLen = journalText.length;
     
-    // Calculate a position that's more likely to be near the end of the text
-    // This gives the impression that stickers are added after the text
-    let posX, posY;
+    // Calculate position to be exactly centered in the canvas
+    const posX = Math.max(0, (canvasRect.width / 2) - 25);
+    const posY = Math.max(0, (canvasRect.height / 2) - 25);
     
-    // If there's substantial text, position near the bottom
-    if (textLen > 20) {
-      // Position in the bottom half of the canvas
-      posX = Math.random() * (canvasRect.width - 50);
-      posY = (canvasRect.height / 2) + (Math.random() * (canvasRect.height / 2) - 50);
-    } else {
-      // With little or no text, position in the center area
-      posX = (canvasRect.width / 2) - 25 + (Math.random() * 50);
-      posY = (canvasRect.height / 2) - 25 + (Math.random() * 50);
-    }
-    
-    // Ensure we stay within bounds
-    posX = Math.max(0, Math.min(posX, canvasRect.width - 50));
-    posY = Math.max(0, Math.min(posY, canvasRect.height - 50));
-    
-    // Create new sticker with calculated position
+    // Create new sticker with centered position
     const newSticker: Sticker = {
       ...sticker,
       posX,
       posY,
-      width: 50,  // Slightly larger stickers
+      width: 50,
       height: 50
     };
     
